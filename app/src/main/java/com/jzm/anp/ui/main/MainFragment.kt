@@ -3,21 +3,27 @@ package com.jzm.anp.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.jzm.anp.R
+import com.jzm.anp.crypto.Base64Activity
+import com.jzm.anp.crypto.DESActivity
+import com.jzm.anp.crypto.RSAActivity
+import com.jzm.anp.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
     val TAG = "MainFragment"
@@ -32,20 +38,22 @@ class MainFragment : Fragment() {
     private lateinit var textView: TextView
 
     private lateinit var telephonyManager: TelephonyManager
+    private lateinit var binding: MainFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+        binding.fragment = this
+        return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        button = activity?.findViewById(R.id.button)!!
+        button = activity?.findViewById(R.id.identifier)!!
         textView = activity?.findViewById(R.id.message)!!
         telephonyManager = activity?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
@@ -56,10 +64,9 @@ class MainFragment : Fragment() {
                 textView.text = getIdentifer()
             }
         }
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -77,6 +84,19 @@ class MainFragment : Fragment() {
         }
 
 
+    }
+
+    fun onBase64BtnClick() {
+        Log.d(TAG, "base64 button clicked")
+        startActivity(Intent(activity, Base64Activity::class.java))
+    }
+
+    fun onDesBtnClick() {
+        startActivity(Intent(activity, DESActivity::class.java))
+    }
+
+    fun onRsaBtnClick() {
+        startActivity(Intent(activity, RSAActivity::class.java))
     }
 
     @SuppressLint("MissingPermission", "NewApi")
