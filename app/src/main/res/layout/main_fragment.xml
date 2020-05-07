@@ -75,5 +75,40 @@
             app:layout_constraintStart_toEndOf="@+id/button"
             app:layout_constraintTop_toBottomOf="@+id/identifier" />
 
+        <Button
+            android:id="@+id/storage_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="28dp"
+            android:onClick="@{() -> fragment.onStorageBtnClick()}"
+            android:text="存储权限"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/base64_btn" />
+
+        <Button
+            android:id="@+id/location_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="28dp"
+            android:onClick="@{() -> fragment.onLocationBtnClick()}"
+            android:text="位置权限"
+            app:layout_constraintStart_toEndOf="@+id/storage_permission"
+            app:layout_constraintTop_toBottomOf="@+id/button" />
+
+        <Button
+            android:id="@+id/scale_drawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="ScaleDrawable"
+            android:textAllCaps="false"
+            android:onClick="@{() -> fragment.onScaleBtnClick()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.542"
+            app:layout_constraintStart_toEndOf="@+id/location_permission"
+            app:layout_constraintTop_toBottomOf="@+id/rsa_btn" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

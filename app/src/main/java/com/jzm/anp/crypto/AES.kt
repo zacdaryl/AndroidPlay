@@ -14,8 +14,8 @@ class AES {
         const val KEY_USER = "Cxex10gx7k9qrFB34q7A1zaozMNV2e3t"
 
         fun encrypt(key: String, plainText: String): String {
-            val secretKey = secretKey(key)
-            val keySpec = SecretKeySpec(secretKey.encoded, "AES")
+//            val secretKey = secretKey(key)
+            val keySpec = SecretKeySpec(key.toByteArray(), "AES")
             val cipher = Cipher.getInstance(transformation)
             cipher.init(Cipher.ENCRYPT_MODE, keySpec)
 
@@ -24,12 +24,12 @@ class AES {
         }
 
         fun decrypt(key: String, cipherText: String): String{
-            val secretKey = secretKey(key)
-            val keySpec = SecretKeySpec(secretKey.encoded, "AES")
+//            val secretKey = secretKey(key)
+            val keySpec = SecretKeySpec(key.toByteArray(), "AES")
             val cipher = Cipher.getInstance(transformation)
             cipher.init(Cipher.DECRYPT_MODE, keySpec)
 
-            val base64DecodeArray = Base64.decode(cipherText, Base64.NO_WRAP)
+            val base64DecodeArray = Base64.decode(cipherText, Base64.DEFAULT)
             val plainByteArray = cipher.doFinal(base64DecodeArray)
 
             return String(plainByteArray)
@@ -45,13 +45,14 @@ class AES {
         private fun secretKey(key: String): SecretKey {
             val keyGenerator = KeyGenerator.getInstance("AES")
             val secureRandom = SecureRandom.getInstance("SHA1PRNG")
+//            val secureRandom = SecureRandom()
             secureRandom.setSeed(key.toByteArray())
             keyGenerator.init(128, secureRandom)
             return keyGenerator.generateKey()
         }
 
         private fun encodeToString(byteArray: ByteArray): String {
-            return String(Base64.encode(byteArray, Base64.NO_WRAP))
+            return String(Base64.encode(byteArray, Base64.DEFAULT))
         }
     }
 }

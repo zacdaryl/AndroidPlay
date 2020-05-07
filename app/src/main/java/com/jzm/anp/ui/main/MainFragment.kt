@@ -3,6 +3,7 @@ package com.jzm.anp.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -16,6 +17,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +28,7 @@ import com.jzm.anp.crypto.Base64Activity
 import com.jzm.anp.crypto.DESActivity
 import com.jzm.anp.crypto.RSAActivity
 import com.jzm.anp.databinding.MainFragmentBinding
+import com.jzm.anp.ui.ScaleActivity
 
 class MainFragment : Fragment() {
     val TAG = "MainFragment"
@@ -34,11 +39,15 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
-    private lateinit var button: Button
+    private lateinit var identityBtn: Button
     private lateinit var textView: TextView
 
     private lateinit var telephonyManager: TelephonyManager
     private lateinit var binding: MainFragmentBinding
+
+    private val REQUEST_CODE_STATE = 1
+    private val REQUEST_CODE_STORAGE = 2
+    private val REQUEST_CODE_LOCATION = 3
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,13 +62,13 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        button = activity?.findViewById(R.id.identifier)!!
+        identityBtn = activity?.findViewById(R.id.identifier)!!
         textView = activity?.findViewById(R.id.message)!!
         telephonyManager = activity?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-        button.setOnClickListener {
+        identityBtn.setOnClickListener {
             if (activity?.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), 1)
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_CODE_STATE)
             } else {
                 textView.text = getIdentifer()
             }
@@ -74,11 +83,46 @@ class MainFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode) {
-            1 -> {
+            REQUEST_CODE_STATE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     textView.text = getIdentifer()
                 } else {
                     Toast.makeText(context, "没有获取设备id的权限", Toast.LENGTH_SHORT).show()
+                }
+            }
+            REQUEST_CODE_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "恭喜！已获得存储权限！", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "没有获得存储权限！", Toast.LENGTH_SHORT).show()
+                }
+            }
+            REQUEST_CODE_LOCATION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "恭喜！已获得位置权限！", Toast.LENGTH_SHORT).show()
+                } else {
+                    val builder: AlertDialog.Builder? = activity?.let {
+                        AlertDialog.Builder(it)
+                    }
+
+                    builder?.setMessage(
+                            "权限开启后在以下场景会使用该权限：\n" +
+                            "-A业务\n" +
+                            "-B业务某某场景\n" +
+                            "-获取所在城市")
+                            ?.setTitle("请求位置访问权限")
+                            ?.setCancelable(false)
+                    builder?.apply {
+                        setPositiveButton("同意") { dialog, which ->
+
+                        }
+                        setNegativeButton("不同意") {dialog, which ->
+
+                        }
+                    }
+
+                    val dialog: AlertDialog? = builder?.create()
+                    dialog?.show()
                 }
             }
         }
@@ -97,6 +141,34 @@ class MainFragment : Fragment() {
 
     fun onRsaBtnClick() {
         startActivity(Intent(activity, RSAActivity::class.java))
+    }
+
+    fun onStorageBtnClick() {
+        if (checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_STORAGE)
+        } else {
+            Toast.makeText(context, "您已经获得存储权限！", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun onLocationBtnClick() {
+//        if (checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
+//            != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
+//        } else {
+//            Toast.makeText(context, "您已经获得位置权限！", Toast.LENGTH_SHORT).show()
+//        }
+        if (checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
+        } else {
+            Toast.makeText(context, "您已经获得位置权限！", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun onScaleBtnClick() {
+        startActivity(Intent(context, ScaleActivity::class.java))
     }
 
     @SuppressLint("MissingPermission", "NewApi")

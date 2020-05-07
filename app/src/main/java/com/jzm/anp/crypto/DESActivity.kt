@@ -27,10 +27,11 @@ class DESActivity : AppCompatActivity() {
         val inputText = mBinding.editText.text.toString()
         println("clear text: $inputText")
 
-        desKey = DES.randomKey()
+//        desKey = AES.randomKey()
+        desKey = AES.KEY_USER
         println("des key: $desKey")
 
-        val cipherText = DES.encrypt(desKey, inputText)
+        val cipherText = AES.encrypt(desKey, inputText)
 
 
         mBinding.base64Text.text = cipherText
@@ -43,7 +44,7 @@ class DESActivity : AppCompatActivity() {
 
         println("des key: $desKey")
 
-        val plainText = DES.decrypt(desKey, input)
+        val plainText = AES.decrypt(desKey, input)
 
         mBinding.base64Text.text = plainText
         println("decrypted text: $plainText")

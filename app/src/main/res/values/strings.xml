@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidPlay</string>
+    <string name="title_activity_scale">ScaleActivity</string>
+    <string name="button">Button</string>
 </resources>
