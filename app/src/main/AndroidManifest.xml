@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".PlayApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -28,6 +29,14 @@
         <activity
             android:name=".crypto.Base64Activity"
             android:label="Base64" />
+
+        <activity
+            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            />
     </application>
 
 </manifest>

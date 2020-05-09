@@ -29,6 +29,11 @@ import com.jzm.anp.crypto.DESActivity
 import com.jzm.anp.crypto.RSAActivity
 import com.jzm.anp.databinding.MainFragmentBinding
 import com.jzm.anp.ui.ScaleActivity
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.plugin.common.MethodChannel
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
     val TAG = "MainFragment"
@@ -68,12 +73,40 @@ class MainFragment : Fragment() {
 
         identityBtn.setOnClickListener {
             if (activity?.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_CODE_STATE)
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_PHONE_STATE),
+                    REQUEST_CODE_STATE
+                )
             } else {
                 textView.text = getIdentifer()
             }
         }
 
+        val engine = FlutterEngineCache.getInstance().get("app_engine_id")
+
+        engine?.let {
+            MethodChannel(
+                it.dartExecutor.binaryMessenger,
+                "com.jzm.anp.flutter/version"
+            ).setMethodCallHandler { call, result ->
+                if (call.method == "getVersionName") {
+                    result.success("1.0.0")
+                } else {
+                    result.notImplemented()
+                }
+            }
+        }
+
+
+        flutter_btn.setOnClickListener {
+            startActivity(
+                this.context?.let { it1 ->
+                    FlutterActivity
+                        .withCachedEngine("app_engine_id")
+                        .build(it1)
+                }
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -82,7 +115,7 @@ class MainFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode) {
+        when (requestCode) {
             REQUEST_CODE_STATE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     textView.text = getIdentifer()
@@ -106,17 +139,18 @@ class MainFragment : Fragment() {
                     }
 
                     builder?.setMessage(
-                            "权限开启后在以下场景会使用该权限：\n" +
-                            "-A业务\n" +
-                            "-B业务某某场景\n" +
-                            "-获取所在城市")
-                            ?.setTitle("请求位置访问权限")
-                            ?.setCancelable(false)
+                        "权限开启后在以下场景会使用该权限：\n" +
+                                "-A业务\n" +
+                                "-B业务某某场景\n" +
+                                "-获取所在城市"
+                    )
+                        ?.setTitle("请求位置访问权限")
+                        ?.setCancelable(false)
                     builder?.apply {
                         setPositiveButton("同意") { dialog, which ->
 
                         }
-                        setNegativeButton("不同意") {dialog, which ->
+                        setNegativeButton("不同意") { dialog, which ->
 
                         }
                     }
@@ -145,8 +179,12 @@ class MainFragment : Fragment() {
 
     fun onStorageBtnClick() {
         if (checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_CODE_STORAGE
+            )
         } else {
             Toast.makeText(context, "您已经获得存储权限！", Toast.LENGTH_SHORT).show()
         }
@@ -160,8 +198,12 @@ class MainFragment : Fragment() {
 //            Toast.makeText(context, "您已经获得位置权限！", Toast.LENGTH_SHORT).show()
 //        }
         if (checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                REQUEST_CODE_LOCATION
+            )
         } else {
             Toast.makeText(context, "您已经获得位置权限！", Toast.LENGTH_SHORT).show()
         }
@@ -186,7 +228,8 @@ class MainFragment : Fragment() {
             }
             //10.0 设备，使用AndroidId
             else -> {
-                identifier =  Settings.System.getString(activity?.contentResolver, Settings.Secure.ANDROID_ID)
+                identifier =
+                    Settings.System.getString(activity?.contentResolver, Settings.Secure.ANDROID_ID)
             }
         }
 
