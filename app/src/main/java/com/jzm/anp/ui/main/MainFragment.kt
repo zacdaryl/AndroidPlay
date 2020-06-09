@@ -28,18 +28,25 @@ import com.jzm.anp.crypto.Base64Activity
 import com.jzm.anp.crypto.DESActivity
 import com.jzm.anp.crypto.RSAActivity
 import com.jzm.anp.databinding.MainFragmentBinding
+import com.jzm.anp.ui.FlutterHostActivity
 import com.jzm.anp.ui.ScaleActivity
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.StandardMessageCodec
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
-    val TAG = "MainFragment"
 
     companion object {
         fun newInstance() = MainFragment()
+        private const val TAG = "MainFragment"
+        private const val REQUEST_CODE_STATE = 1
+        private const val REQUEST_CODE_STORAGE = 2
+        private const val REQUEST_CODE_LOCATION = 3
     }
 
     private lateinit var viewModel: MainViewModel
@@ -50,9 +57,6 @@ class MainFragment : Fragment() {
     private lateinit var telephonyManager: TelephonyManager
     private lateinit var binding: MainFragmentBinding
 
-    private val REQUEST_CODE_STATE = 1
-    private val REQUEST_CODE_STORAGE = 2
-    private val REQUEST_CODE_LOCATION = 3
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,15 +102,19 @@ class MainFragment : Fragment() {
         }
 
 
+        var flag = true
         flutter_btn.setOnClickListener {
-            startActivity(
-                this.context?.let { it1 ->
-                    FlutterActivity
-                        .withCachedEngine("app_engine_id")
-                        .build(it1)
-                }
-            )
+            val intent = Intent(activity, FlutterSubActivity::class.java)
+            val route = if (flag) "/home" else "/foo"
+            intent.putExtra("route", route)
+            startActivity(intent)
+            flag = !flag
         }
+
+        flutter_fragment.setOnClickListener {
+            startActivity(Intent(activity, FlutterHostActivity::class.java))
+        }
+
     }
 
     override fun onRequestPermissionsResult(
@@ -178,7 +186,7 @@ class MainFragment : Fragment() {
     }
 
     fun onStorageBtnClick() {
-        if (checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(
@@ -197,7 +205,7 @@ class MainFragment : Fragment() {
 //        } else {
 //            Toast.makeText(context, "您已经获得位置权限！", Toast.LENGTH_SHORT).show()
 //        }
-        if (checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermissions(

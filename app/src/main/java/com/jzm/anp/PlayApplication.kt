@@ -12,13 +12,13 @@ class PlayApplication : Application() {
         super.onCreate()
 
         flutterEngine = FlutterEngine(this)
-
-//        flutterEngine.navigationChannel.setInitialRoute("/")
+        flutterEngine.navigationChannel.setInitialRoute("/foo")
 
         // Start executing Dart code to pre-warm the FlutterEngine.
         flutterEngine.dartExecutor.executeDartEntrypoint(
             DartExecutor.DartEntrypoint.createDefault()
         )
+
 
         FlutterEngineCache
             .getInstance()

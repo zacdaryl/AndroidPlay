@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttermodule/foo.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,10 +21,14 @@ class MyApp extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        primaryColor: color,
-        accentColor: color
+        primaryColor: Colors.blue,
+        accentColor: Colors.blueAccent
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+//      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        "/home": (context) => MyHomePage(title: "hello"),
+        "/foo": (context) => Foo()
+      },
     );
   }
 }
@@ -67,14 +72,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+//    setState(() {
+//      // This call to setState tells the Flutter framework that something has
+//      // changed in this State, which causes it to rerun the build method below
+//      // so that the display can reflect the updated values. If we changed
+//      // _counter without calling setState(), then the build method would not be
+//      // called again, and so nothing would appear to happen.
+//      _counter++;
+//    });
+    Navigator.pushNamed(context, "/foo");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    print('init status');
+    const msgChannel = const BasicMessageChannel('basic_msg_channel', StandardMessageCodec());
+    msgChannel.setMessageHandler((message) => Future(() async{
+      setState(() {
+        _versionName = message["a"] + message["b"];
+      });
+      return "";
+    }));
   }
 
   @override
@@ -125,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: getVersionName,
+        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

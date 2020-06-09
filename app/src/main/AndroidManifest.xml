@@ -13,10 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.FlutterHostActivity"></activity>
         <activity
             android:name=".ui.ScaleActivity"
             android:label="@string/title_activity_scale"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".crypto.RSAActivity" />
         <activity android:name=".crypto.DESActivity" />
         <activity android:name=".MainActivity">
@@ -28,15 +29,14 @@
         </activity>
         <activity
             android:name=".crypto.Base64Activity"
-            android:label="Base64" />
-
-        <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize"
-            />
+            android:label="Base64" /> <!-- <activity -->
+        <!-- android:name="io.flutter.embedding.android.FlutterActivity" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" -->
+        <!-- android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" -->
+        <!-- android:hardwareAccelerated="true" -->
+        <!-- android:windowSoftInputMode="adjustResize" -->
+        <!-- /> -->
+        <activity android:name=".ui.main.FlutterSubActivity" />
     </application>
 
 </manifest>
