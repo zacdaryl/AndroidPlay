@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.FlutterHostActivity"></activity>
+        <activity android:name=".ui.MutiThreadActivity" />
+        <service android:name=".thread.WorkIntentService"/>
+        <activity android:name=".ui.HandlerActivity" />
+        <activity android:name=".ui.UnicodeActivity" />
+        <activity android:name=".ui.FlutterHostActivity" />
         <activity
             android:name=".ui.ScaleActivity"
             android:label="@string/title_activity_scale"

@@ -3,7 +3,6 @@ package com.jzm.anp.ui.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,7 +17,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -28,15 +26,9 @@ import com.jzm.anp.crypto.Base64Activity
 import com.jzm.anp.crypto.DESActivity
 import com.jzm.anp.crypto.RSAActivity
 import com.jzm.anp.databinding.MainFragmentBinding
-import com.jzm.anp.ui.FlutterHostActivity
-import com.jzm.anp.ui.ScaleActivity
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.android.FlutterView
+import com.jzm.anp.ui.*
 import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.StandardMessageCodec
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
@@ -113,6 +105,10 @@ class MainFragment : Fragment() {
 
         flutter_fragment.setOnClickListener {
             startActivity(Intent(activity, FlutterHostActivity::class.java))
+        }
+
+        unicode_btn.setOnClickListener {
+            startActivity(Intent(activity, UnicodeActivity::class.java))
         }
 
     }
@@ -196,6 +192,10 @@ class MainFragment : Fragment() {
         } else {
             Toast.makeText(context, "您已经获得存储权限！", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun onHandlerClick() {
+        startActivity(Intent(activity, MutiThreadActivity::class.java))
     }
 
     fun onLocationBtnClick() {
