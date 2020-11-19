@@ -26,6 +26,9 @@ import com.jzm.anp.crypto.Base64Activity
 import com.jzm.anp.crypto.DESActivity
 import com.jzm.anp.crypto.RSAActivity
 import com.jzm.anp.databinding.MainFragmentBinding
+import com.jzm.anp.launchmode.ActivityA
+import com.jzm.anp.service.LogService
+import com.jzm.anp.service.ServiceHostActivity
 import com.jzm.anp.ui.*
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodChannel
@@ -109,6 +112,14 @@ class MainFragment : Fragment() {
 
         unicode_btn.setOnClickListener {
             startActivity(Intent(activity, UnicodeActivity::class.java))
+        }
+
+        launch_mode_btn.setOnClickListener {
+            startActivity(Intent(activity, ActivityA::class.java))
+        }
+
+        start_service_btn.setOnClickListener {
+            startActivity(Intent(activity, ServiceHostActivity::class.java))
         }
 
     }

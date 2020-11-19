@@ -13,8 +13,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".service.ServiceHostActivity"></activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".launchmode.LaunchModeBaseActivity" />
+        <activity android:name=".launchmode.ActivityD" /> <!-- android:launchMode="singleTop" /> -->
+        <activity
+            android:name=".launchmode.ActivityC"
+            android:launchMode="singleInstance" />
+        <activity android:name=".launchmode.ActivityB" />
+        <activity android:name=".launchmode.ActivityA" />
         <activity android:name=".ui.MutiThreadActivity" />
-        <service android:name=".thread.WorkIntentService"/>
+
+        <service android:name=".thread.WorkIntentService" />
+
         <activity android:name=".ui.HandlerActivity" />
         <activity android:name=".ui.UnicodeActivity" />
         <activity android:name=".ui.FlutterHostActivity" />
@@ -24,13 +41,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".crypto.RSAActivity" />
         <activity android:name=".crypto.DESActivity" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".crypto.Base64Activity"
             android:label="Base64" /> <!-- <activity -->
@@ -41,6 +51,8 @@
         <!-- android:windowSoftInputMode="adjustResize" -->
         <!-- /> -->
         <activity android:name=".ui.main.FlutterSubActivity" />
+
+        <service android:name=".service.LogService" />
     </application>
 
 </manifest>
