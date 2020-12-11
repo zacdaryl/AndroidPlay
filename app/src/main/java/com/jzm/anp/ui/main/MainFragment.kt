@@ -242,9 +242,9 @@ class MainFragment : Fragment() {
                 identifier = telephonyManager.deviceId
             }
             //8.0 ~ 10.0 的设备
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> {
-                identifier = telephonyManager.imei
-            }
+//            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> {
+//                identifier = telephonyManager.imei
+//            }
             //10.0 设备，使用AndroidId
             else -> {
                 identifier =

@@ -19,6 +19,28 @@ open class LaunchModeBaseActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d(tag, "$this -> onResume")
+        tasks()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(tag, "$this -> onStart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(tag, "$this -> onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(tag, "$this -> onStop")
+    }
+
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         Log.d(tag, "$this -> onNewIntent")

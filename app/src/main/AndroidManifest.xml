@@ -27,7 +27,8 @@
             android:name=".launchmode.ActivityC"
             android:launchMode="singleInstance" />
         <activity android:name=".launchmode.ActivityB" />
-        <activity android:name=".launchmode.ActivityA" />
+        <activity android:name=".launchmode.ActivityA"
+            android:launchMode="singleTask"/>
         <activity android:name=".ui.MutiThreadActivity" />
 
         <service android:name=".thread.WorkIntentService" />
