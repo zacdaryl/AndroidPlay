@@ -40,6 +40,11 @@ open class LaunchModeBaseActivity : AppCompatActivity() {
         Log.d(tag, "$this -> onStop")
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(tag, "$this -> onSaveInstanceState")
+    }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
